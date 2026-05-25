@@ -279,7 +279,7 @@ function openDayModal(ds) {
   document.getElementById('day-title').textContent=`${RO_DAYS[dt.getDay()]}, ${dt.getDate()} ${RO_MONTHS_ABR[dt.getMonth()]} ${dt.getFullYear()}`;
   const log=APP.logs[ds];
   document.getElementById('manual-hours').value=log?log.hours:10;
-  document.getElementById('location-note').value=log?(log.location_note||')':'';
+  document.getElementById('location-note').value=log?(log.location_note||''):'';
   if(log&&log.work_type){const sel=document.getElementById('work-type-select');for(let o of sel.options)if(o.value===log.work_type){sel.value=log.work_type;break;}}
   document.getElementById('modal-day').style.display='block';
 }
