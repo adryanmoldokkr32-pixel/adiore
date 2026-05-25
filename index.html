@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#050510">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>PLAFON STEEL — Pontaj</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="screen-home" class="screen active">
+  <div class="home-header">
+    <span class="logo-crane">🏗️</span>
+    <h1 class="logo-title">
+      <span class="logo-plafon">PLAFON</span>
+      <span class="logo-steel">STEEL</span>
+    </h1>
+    <p class="logo-sub">▸ PONTAJ ORE DE MUNCA ◂</p>
+    <div id="clock" class="clock">00:00:00</div>
+  </div>
+  <div class="home-menu">
+    <button class="menu-btn" onclick="openCoordinator()">
+      <span class="btn-icon">🔑</span><span class="btn-label">COORDONATOR</span>
+    </button>
+    <div class="menu-row">
+      <button class="menu-btn half" onclick="showScreen('info')">
+        <span class="btn-icon">📋</span><span class="btn-label">INFO</span>
+      </button>
+      <button class="menu-btn half yellow" onclick="showScreen('sites')">
+        <span class="btn-icon">🏢</span><span class="btn-label">SANTIER</span>
+      </button>
+    </div>
+    <button class="menu-btn worker-card" id="worker-card" onclick="openWorkerCalendar()">
+      <div class="worker-avatar" id="wc-avatar">🔨</div>
+      <div class="worker-info">
+        <div class="worker-name" id="wc-name">—</div>
+        <div class="worker-role" id="wc-role">—</div>
+        <div class="worker-stats" id="wc-stats">Apasa pentru autentificare</div>
+      </div>
+      <span class="chevron">›</span>
+    </button>
+    <div class="menu-row">
+      <button class="menu-btn half purple" onclick="showScreen('stats')">
+        <span class="btn-icon">📊</span><span class="btn-label">MEDIA &amp; TOP</span>
+      </button>
+      <button class="menu-btn half teal" onclick="showScreen('vacation')">
+        <span class="btn-icon">🏖️</span><span class="btn-label">VACANTA</span>
+      </button>
+    </div>
+    <button class="menu-btn" onclick="showScreen('teams')">
+      <span class="btn-icon">👥</span><span class="btn-label">ECHIPE &amp; PLANIFICARE</span>
+    </button>
+    <div class="notif-bar">
+      <span class="notif-icon">🔕</span>
+      <span class="notif-text" id="notif-text">NOTIFICARI LA 17:35</span>
+      <button class="notif-btn" id="notif-btn" onclick="toggleNotif()">CLICK PENTRU A ACTIVA</button>
+    </div>
+  </div>
+  <div class="made-with">⟳ Made with Emergent</div>
+  <div class="site-url">adiore.netlify.app</div>
+</div>
+
+<div id="screen-calendar" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="showScreen('home')">‹</button>
+    <div class="month-nav">
+      <button onclick="prevMonth()">‹</button>
+      <span id="month-label">Mai 2026</span>
+      <button onclick="nextMonth()">›</button>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card cyan"><div class="stat-value" id="stat-hours">0</div><div class="stat-label">ORE LUCRATE</div></div>
+    <div class="stat-card yellow"><div class="stat-value" id="stat-days">0</div><div class="stat-label">ZILE LUCRATE</div></div>
+    <div class="stat-card green"><div class="stat-value" id="stat-avg">0</div><div class="stat-label">MEDIE/ZI</div></div>
+  </div>
+  <div class="gps-section">
+    <div class="gps-title">📍 GPS CHECK-IN / CHECK-OUT</div>
+    <select id="site-select" class="site-select"><option value="">-- Alege santierul --</option></select>
+    <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">📍 CHECK-IN</button>
+  </div>
+  <div class="calendar-section">
+    <div class="cal-label">● CALENDAR PONTAJ</div>
+    <div class="cal-header"><span>Lu</span><span>Ma</span><span>Mi</span><span>Jo</span><span>Vi</span><span>Sa</span><span>Du</span></div>
+    <div id="cal-grid" class="cal-grid"></div>
+  </div>
+  <div class="history-section">
+    <div class="history-title">📅 ISTORIC LUNI ANTERIOARE</div>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<div id="screen-coordinator" class="screen">
+  <div class="screen-header"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>COORDONATOR</h2></div>
+  <div id="coordinator-content" class="coordinator-content"></div>
+</div>
+
+<div id="screen-stats" class="screen">
+  <div class="screen-header"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>MEDIA &amp; TOP</h2></div>
+  <div id="stats-content" class="stats-content"></div>
+</div>
+
+<div id="screen-vacation" class="screen">
+  <div class="screen-header"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>VACANTA</h2></div>
+  <div id="vacation-content" class="vacation-content"></div>
+</div>
+
+<div id="screen-teams" class="screen">
+  <div class="screen-header"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>ECHIPE &amp; PLANIFICARE</h2></div>
+  <div id="teams-content" class="teams-content"></div>
+</div>
+
+<div id="screen-info" class="screen">
+  <div class="screen-header"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>INFO</h2></div>
+  <div class="info-content">
+    <p><strong>PLAFON STEEL</strong> — Sistem pontaj ore munca</p>
+    <p>Versiune: 1.0.0</p>
+    <p>Salvare: Supabase Cloud</p>
+    <p>Deploy: Netlify</p>
+  </div>
+</div>
+
+<div id="screen-sites" class="screen">
+  <div class="screen-header"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>SANTIERE</h2></div>
+  <div id="sites-content" style="padding:16px"></div>
+</div>
+
+<div id="modal-pin" class="modal" style="display:none;align-items:flex-end;padding-bottom:0">
+  <div class="pin-card" style="border-radius:20px;margin-bottom:0;width:100%;max-width:100%;padding-bottom:24px">
+    <div class="pin-avatar" id="pin-avatar">🔨</div>
+    <div class="pin-name" id="pin-name">BIBIKA</div>
+    <div class="pin-role" id="pin-role">Salahor</div>
+    <div class="pin-boxes" id="pin-boxes">
+      <div class="pin-box active" id="pb0"></div>
+      <div class="pin-box" id="pb1"></div>
+      <div class="pin-box" id="pb2"></div>
+      <div class="pin-box" id="pb3"></div>
+    </div>
+    <div id="pin-error" class="pin-error" style="display:none">❌ PIN gresit!</div>
+    <button class="pin-cancel" onclick="closePINModal()">× Anuleaza</button>
+  </div>
+</div>
+
+<div id="keyboard-overlay" style="display:none"></div>
+
+<div id="modal-day" style="display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.6)">
+  <div class="day-card">
+    <div class="day-header">
+      <span>📅</span>
+      <span id="day-title">MA, 26 MAI 2026</span>
+      <button class="close-x" onclick="closeDayModal()">×</button>
+    </div>
+    <div class="quick-hours">
+      <button onclick="quickSave(6)">⚡6h</button>
+      <button onclick="quickSave(7)">⚡7h</button>
+      <button onclick="quickSave(8)">⚡8h</button>
+      <button onclick="quickSave(9)">⚡9h</button>
+      <button onclick="quickSave(10)">⚡10h</button>
+      <button onclick="quickSave(12)">⚡12h</button>
+    </div>
+    <p class="quick-hint">⚡ Click pe ore = salvare instant</p>
+    <div class="manual-row">
+      <div class="manual-group">
+        <label>ORE LUCRATE (MANUAL)</label>
+        <input type="number" id="manual-hours" value="10" min="1" max="24" step="0.5">
+      </div>
+      <div class="manual-group">
+        <label>TIP LUCRARE</label>
+        <select id="work-type-select">
+          <option value="Metal T24">🔨 Metal T24</option>
+          <option value="Rigips">📦 Rigips</option>
+          <option value="Vopsit">🎨 Vopsit</option>
+          <option value="PVC">🔧 PVC</option>
+          <option value="Spaclu">🏗️ Spaclu</option>
+          <option value="Alte lucrari">⚙️ Alte lucrari</option>
+        </select>
+      </div>
+    </div>
+    <label class="note-label">NOTA / LOCATIE</label>
+    <input type="text" id="location-note" placeholder="ex: Birou BCR etaj 2..." class="note-input">
+    <div class="day-actions">
+      <button class="btn-save" onclick="saveManual()">✓ SALVEAZA MANUAL</button>
+      <button class="btn-delete" onclick="deleteLog()">🗑️ Sterge</button>
+      <button class="btn-cls" onclick="closeDayModal()">×</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-workers" class="modal" style="display:none">
+  <div class="pin-card">
+    <div style="font-family:var(--font-t);font-size:13px;margin-bottom:16px;letter-spacing:2px;color:var(--cyan)">SELECTEAZA MUNCITOR</div>
+    <div id="worker-selector-list"></div>
+    <button onclick="closeWorkerSelector()" class="pin-cancel" style="margin-top:8px">× Anuleaza</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
